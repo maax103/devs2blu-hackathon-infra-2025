@@ -38,12 +38,22 @@ resource "aws_security_group_rule" "ingress_80_sg_pub_rule" {
   to_port = 80
 }
 
+
+resource "aws_security_group_rule" "ingress_8080_sg_pub_rule" {
+  type = "ingress"
+  protocol = "tcp"
+  security_group_id = aws_security_group.sg_pub.id
+  cidr_blocks = ["0.0.0.0/0"]
+  from_port = 8080
+  to_port = 8080
+}
+
 resource "aws_network_interface" "net_interface_pub_b" {
   subnet_id = "${var.nginx_pub_subnet_id_b}"
 }
 
 resource "aws_instance" "nginx_ec2_b" {
-  instance_type = "t2.micro"
+  instance_type = "t3.large"
   ami = data.aws_ami.imagem_ec2.id
   vpc_security_group_ids = [aws_security_group.sg_pub.id]
   subnet_id = "${var.nginx_pub_subnet_id_b}"
